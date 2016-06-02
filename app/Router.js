@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { syncHistoryWithStore } from 'react-router-redux';
 import { Router, match, RouterContext, browserHistory } from 'react-router';
 import Helmet from 'react-helmet';
 import routes from './Routes';
@@ -13,9 +14,11 @@ const isClient = typeof document !== 'undefined';
 if (isClient) {
 	const store = configureStore(window.__INITIAL_STATE__);
 
+	const history = syncHistoryWithStore(browserHistory, store)
+
 	ReactDOM.render(
 		<Provider store={store}>
-			<Router history={browserHistory}>{routes}</Router>
+			<Router history={history}>{routes}</Router>
 		</Provider>,
 		document.getElementById('root')
 	);
